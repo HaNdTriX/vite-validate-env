@@ -1,7 +1,7 @@
 {
   "name": "vite-validate-env",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Vite plugin to validate environment variables against any standard schema library (Zod, Valibot, ArkType).",
   "author": "Henrik Wenz <handtrix@mail.com>",
   "license": "MIT",
