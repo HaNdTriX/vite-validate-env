@@ -34,8 +34,9 @@ export const envSchema = z.object({
 });
 
 declare global {
+  interface ImportMetaEnv extends z.infer<typeof envSchema> {}
   interface ImportMeta {
-    readonly env: z.infer<typeof envSchema>;
+    readonly env: ImportMetaEnv;
   }
 }
 ```
