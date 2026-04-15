@@ -24,13 +24,19 @@ const runConfig = async (
 };
 
 describe("validateEnv plugin", () => {
+  let originalCI: string | undefined;
+
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, "error").mockImplementation(() => {});
+    originalCI = process.env.CI;
+    process.env.CI = "1";
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+    if (originalCI !== undefined) process.env.CI = originalCI;
+    else delete process.env.CI;
   });
 
   it("returns a plugin with the correct name and enforce: 'pre'", () => {
@@ -82,7 +88,7 @@ describe("validateEnv plugin", () => {
     ).rejects.toThrow("Invalid Environment Variables");
 
     expect(console.error).toHaveBeenCalledWith(
-      "\n❌ Invalid Environment Variables:",
+      "\nInvalid Environment Variables:",
     );
     expect(console.error).toHaveBeenCalledWith(
       "   - VITE_API_URL: API_URL is required",

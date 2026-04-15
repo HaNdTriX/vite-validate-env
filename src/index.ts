@@ -27,7 +27,15 @@ export function validateEnv<
       const result = await schema["~standard"].validate(rawEnv);
 
       if (result.issues) {
-        console.error("\n❌ Invalid Environment Variables:");
+        const isCI = process.env.CI;
+        const c = {
+          red: (s: string) => (isCI ? s : `\x1b[31m${s}\x1b[0m`),
+          redBold: (s: string) => (isCI ? s : `\x1b[31;1m${s}\x1b[0m`),
+          cyanBold: (s: string) => (isCI ? s : `\x1b[36;1m${s}\x1b[0m`),
+          yellow: (s: string) => (isCI ? s : `\x1b[33m${s}\x1b[0m`),
+        };
+
+        console.error(`\n${c.redBold("Invalid Environment Variables:")}`);
 
         for (const issue of result.issues) {
           const path = issue.path
@@ -35,7 +43,9 @@ export function validateEnv<
                 .map((p) => (typeof p === "object" ? p.key : p))
                 .join(".")
             : "root";
-          console.error(`   - ${path}: ${issue.message}`);
+          console.error(
+            `   ${c.red("-")} ${c.cyanBold(path)}: ${c.yellow(issue.message)}`,
+          );
         }
 
         console.error("\n");
