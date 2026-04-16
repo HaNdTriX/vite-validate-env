@@ -63,7 +63,7 @@ describe("validateEnv plugin", () => {
 
     await expect(
       runConfig(plugin, {}, { mode: "development", command: "serve" }),
-    ).resolves.toBeUndefined();
+    ).resolves.toEqual({ define: {} });
 
     expect(console.error).not.toHaveBeenCalled();
   });
@@ -147,35 +147,35 @@ describe("validateEnv plugin", () => {
     );
   });
 
-  it("injects validated transformed values into process.env", async () => {
+  it("returns vite defined variables for import.meta.env with transformations", async () => {
     vi.mocked(loadEnv).mockReturnValueOnce({ VITE_PORT: "8080" });
-
-    // Backup process.env
-    const originalPort = process.env.VITE_PORT;
-    const originalExtra = process.env.VITE_EXTRA;
-    delete process.env.VITE_PORT;
-    delete process.env.VITE_EXTRA;
 
     const plugin = validateEnv({
       "~standard": {
         version: 1,
         vendor: "test",
         validate: (v: any) => ({
-          value: { VITE_PORT: 8080, VITE_EXTRA: { prop: true } },
+          value: {
+            VITE_PORT: 8080,
+            VITE_EXTRA: { prop: true },
+            VITE_STR: "hello",
+          },
         }),
       },
     });
 
-    await runConfig(plugin, {}, { mode: "test", command: "serve" });
+    const result = await runConfig(
+      plugin,
+      {},
+      { mode: "test", command: "serve" },
+    );
 
-    expect(process.env.VITE_PORT).toBe("8080");
-    expect(process.env.VITE_EXTRA).toBe('{"prop":true}');
-
-    // Clean up mutations
-    if (originalPort !== undefined) process.env.VITE_PORT = originalPort;
-    else delete process.env.VITE_PORT;
-
-    if (originalExtra !== undefined) process.env.VITE_EXTRA = originalExtra;
-    else delete process.env.VITE_EXTRA;
+    expect(result).toEqual({
+      define: {
+        "import.meta.env.VITE_PORT": 8080,
+        "import.meta.env.VITE_EXTRA": { prop: true },
+        "import.meta.env.VITE_STR": '"hello"',
+      },
+    });
   });
 });

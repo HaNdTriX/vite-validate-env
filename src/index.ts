@@ -54,15 +54,18 @@ export function validateEnv<
         throw error;
       }
 
-      // Inject validated and transformed values back into process.env
-      if (result.value) {
-        for (const [key, value] of Object.entries(result.value)) {
-          if (value !== undefined) {
-            process.env[key] =
-              typeof value === "string" ? value : JSON.stringify(value);
-          }
-        }
-      }
+      if (!result.value) return;
+
+      const env = Object.entries(result.value);
+
+      return {
+        define: Object.fromEntries(
+          env.map(([key, value]) => [
+            `import.meta.env.${key}`,
+            typeof value === "string" ? JSON.stringify(value) : value,
+          ]),
+        ),
+      };
     },
   };
 }
