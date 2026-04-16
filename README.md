@@ -12,7 +12,7 @@ A Vite plugin to validate your environment variables using any standard schema l
 - ⚙️ **Agnostic:** Works with Zod, Valibot, ArkType, or any Standard Schema.
 - 🛑 **Fails Fast:** Enforced pre-resolution execution halts the Vite process immediately with helpful error output.
 - 🪶 **Zero Configuration:** Seamlessly respects your existing Vite `envDir` and `root` settings.
-- 📝 **Ecosystem Binding:** Propagates schema defaults and data transformations directly back into `process.env`.
+- 📝 **Ecosystem Binding:** Propagates schema defaults and data transformations directly back into `import.meta.env`.
 - 📦 **Lightweight:** Zero dependencies.
 
 ## Installation
@@ -35,6 +35,9 @@ import { z } from "zod";
 export const envSchema = z.object({
   VITE_API_URL: z.string().url(),
   VITE_APP_NAME: z.string().min(1),
+  // Advanced transformations are fully supported:
+  VITE_PORT: z.coerce.number().default(3000),
+  VITE_FEAT_TOGGLES: z.string().transform((val) => JSON.parse(val)),
 });
 
 declare global {
@@ -68,7 +71,7 @@ The plugin hooks directly into Vite's `config` resolution step. It accurately lo
 
 If any environment variables are mismatched or missing, the plugin will seamlessly intercept the build or dev server, print clear and pinpointed error paths directly in your console, and halt the Vite process via standard errors so your development experience remains tight and predictable.
 
-Additionally, because we return evaluated values post-schema matching, any transformation values or default inputs automatically cascade down onto `process.env`.
+Additionally, because we return evaluated values post-schema matching, any transformation values or default inputs automatically cascade down onto `import.meta.env`. Since values are injected using Vite's `define`, complex objects or numbers are perfectly supported without mutating `process.env`.
 
 ## Gotchas & Behavior
 
