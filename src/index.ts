@@ -56,7 +56,9 @@ export function validateEnv<
 
       if (!result.value) return;
 
-      const env = Object.entries(result.value);
+      const env = Object.entries(result.value).filter(
+        ([, value]) => value !== undefined,
+      );
 
       return {
         define: Object.fromEntries(

@@ -159,6 +159,7 @@ describe("validateEnv plugin", () => {
             VITE_PORT: 8080,
             VITE_EXTRA: { prop: true },
             VITE_STR: "hello",
+            VITE_UNDEFINED: undefined,
           },
         }),
       },
