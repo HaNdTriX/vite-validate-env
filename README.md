@@ -1,7 +1,7 @@
-# vite-validate-env
+# vite-plugin-validate-env
 
 <p>
-  <a href="https://github.com/handtrix/vite-validate-env/actions/workflows/ci.yml"><img src="https://github.com/handtrix/vite-validate-env/actions/workflows/ci.yml/badge.svg?branch=main" alt="build status"></a>
+  <a href="https://github.com/handtrix/vite-plugin-validate-env/actions/workflows/ci.yml"><img src="https://github.com/handtrix/vite-plugin-validate-env/actions/workflows/ci.yml/badge.svg?branch=main" alt="build status"></a>
 </p>
 
 A Vite plugin to validate your environment variables using any standard schema library (Zod, Valibot, ArkType, etc.). It uses [`@standard-schema/spec`](https://github.com/standard-schema/standard-schema) under the hood to ensure full library-agnostic compatibility.
@@ -18,7 +18,7 @@ A Vite plugin to validate your environment variables using any standard schema l
 ## Installation
 
 ```bash
-npm install vite-validate-env -D
+npm install vite-plugin-validate-env -D
 # Ensure you have your favorite schema library installed, e.g. zod
 npm install zod
 ```
@@ -52,7 +52,7 @@ Then use it in your `vite.config.ts`:
 
 ```typescript
 import { defineConfig } from "vite";
-import { validateEnv } from "vite-validate-env";
+import { validateEnv } from "vite-plugin-validate-env";
 import { envSchema } from "./src/env";
 
 export default defineConfig({
