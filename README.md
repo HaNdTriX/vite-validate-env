@@ -2,6 +2,7 @@
 
 <p>
   <a href="https://github.com/handtrix/vite-plugin-validate-env/actions/workflows/ci.yml"><img src="https://github.com/handtrix/vite-plugin-validate-env/actions/workflows/ci.yml/badge.svg?branch=main" alt="build status"></a>
+  <img src="https://registry.vite.dev/api/badges?package=vite-plugin-validate-env&tool=vite" alt="Vite compatibility">
 </p>
 
 A Vite plugin to validate your environment variables using any standard schema library (Zod, Valibot, ArkType, etc.). It uses [`@standard-schema/spec`](https://github.com/standard-schema/standard-schema) under the hood to ensure full library-agnostic compatibility.
